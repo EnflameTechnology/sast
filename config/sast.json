@@ -1,0 +1,227 @@
+{
+    "sast_items_dict" : {
+        "cpplint check":{
+            "id":"SC0001",
+            "guide_link":"",
+            "ignore_admin":[],
+            "suffix":[".c", ".cc", ".h", ".hpp", ".cpp", ".tops"],
+            "skip_files":[],
+            "repo_config_file":""
+        },
+        "cppcheck":{
+            "id":"SC0002",
+            "guide_link":"",
+            "ignore_admin":[],
+            "ignore_change_keyword":"",
+            "suffix" :[".c", ".cc", ".h", ".hpp", ".cpp"],
+            "skip_files": [],
+            "cppcheck_result_file":"../cppcheck_result.xml"
+        },
+        "shell check":{
+            "id":"SS0001",
+            "guide_link":"",
+            "ignore_admin":[],
+            "ignore_change_keyword":"",
+            "start_filter":"3rdparty/",
+            "end_filter":".sh",
+            "shell_strict_mode_check":{
+                "id":"SS0002",
+                "guide_link":"",
+                "ignore_admin":[],
+                "ignoreshellstrictmodecheckPath":[],
+                "ignoreshellstrictmodecheck":[]
+            }
+        },
+        "requirements check":{
+            "id":"SP0001",
+            "guide_link":"",
+            "ignore_admin":[],
+            "ignore_change_keyword":"",
+            "ignore_list":["git+https://github.com/NVIDIA/dllogger","https://download.pytorch.org/whl/cpu"],
+            "check_files_regex":[".*requirements.txt$"],
+            "message":"requirements.txt should specify the version of the package",
+            "specific_version_regex":{
+                ">=":[]
+            }
+        },
+        "jsonlint check":{
+            "id":"SJN0001",
+            "guide_link":"",
+            "ignore_admin":[],
+            "ignore_change_keyword":"",
+            "ignorejsoncheck":[]
+        },
+        "lines check":{
+            "id":"SX0011",
+            "guide_link":"",
+            "ignore_admin":[],
+            "ignore_change_keyword":"ignore change size",
+            "skip_files":[],
+            "check_file_type":[".*\\.cpp",".*\\.h",".*\\.c",".*\\.cc",".*\\.inc",".*\\.hpp",".*\\.py",".*\\.java",".*\\.go"],
+            "lines_limit":2000,
+            "error_message":""
+        },
+        "file type check":{
+            "id":"SX0002",
+            "guide_link":"",
+            "ignore_admin":[],
+            "ignore_change_keyword":"ignore change file type",
+            "forbidden_file_type_list":[
+                ".*\\.deb$",".*\\.rpm$",".*\\.dll$",".*\\.idea$",".*\\.vs$",
+                ".*\\.pyc$",".*\\.vscode$",".*\\.o$",".*\\.swap$",".*\\.tmp$"
+            ]
+        },
+        "keyword check":{
+            "id":"SX0004",
+            "guide_link":"",
+            "ignore_admin":[],
+            "ignore_change_keyword":"",
+            "forbidden_string_dict" : {
+                "EFLOG(":{
+                    "reason":"EFLOG is deprecated, because hlir's debug logs drown out the customer's own logs.",
+                    "suggestion":"Please use EFDLOG and EF_PRINT."
+                },
+                "EXPECT_DEATH":{
+                    "reason":"Using the EXPECT_DEATH test in google test will generate core file in the case of test pass.",
+                    "suggestion":"Please follow the example of sdk/tests/common/test_utils.h ."
+                },
+                "std::cout":{
+                    "reason":"Do not allow std::cout in code.",
+                    "suggestion":"Please use EFDLOG or EF_PRINT instead.",
+                    "check_dirs":[]
+                }
+            },
+            "forbidden_add_string":{
+            },
+            "forbidden_string_mode":{
+                "#include\\s+\".*\\.\\./.*\"":{
+                    "msg":"Do not use ./ or ../ paths when including files; convert them to absolute file paths such as dir1/dir2/op_tense.h instead of ../../op_tense.h..",
+                    "repo":[".*"]
+                },
+                "#include\\s+\".*\\./.*\"":{
+                    "msg":"Do not use ./ or ../ paths when including files; convert them to absolute file paths such as dir1/dir2/op_tense.h instead of ../../op_tense.h..",
+                    "repo":[".*"]
+                }
+            },
+            "judge_str" : "",
+            "ignore_list":[]
+        },
+        "size check":{
+            "id":"SX0005",
+            "guide_link":"",
+            "ignore_admin":[],
+            "ignore_change_keyword":"ignore change file size",
+            "skip_files":[],
+            "message":"--- Find some files oversize, file size rule: a. maximum text size is: 2097152B (2Mb). b. maximum binary size is: 1024000B (1000Kb). Please remove those files over the limit.",
+            "binary_size_in_bytes":1024000,
+            "text_size_in_bytes":2097152
+        },
+        "line terminators check":{
+            "id":"SX0009",
+            "guide_link":"",
+            "ignore_admin":[],
+            "ignore_change_keyword":"",
+            "lineTerminatorsCheckFileType":[".sh", ".py", ".hpp", ".h", ".cc", ".cpp", ".c",".go",".java"]
+        },
+        "git lfs check":{
+            "id":"SX0012",
+            "guide_link":"",
+            "ignore_admin":[],
+            "ignore_change_keyword":"ignore change lfs check",
+            "need_lfs_list" : [
+                ".png",".pb",".jpg",".bin",".npy",
+                ".so",".gif",".gz",".dat",".pdf",
+                ".bmp",".zip",".exe",".lib",".jar",
+                ".pdb",".wav",".mp4",".xls",".img",
+                ".mp3",".apk",".tar",".onnx",".jpeg",
+                ".JPG",".ppt",".pptx"
+            ],
+            "attributes_file":".gitattributes",
+            "file_size_limit": 51200000,
+            "total_size_limit": 204800000,
+            "lfs_config_path": ".lfsconfig",
+            "lfsconfig_sample":""
+        },
+        "codespell check":{
+            "id":"SX0020",
+            "guide_link":"",
+            "ignore_admin":[],
+            "default_config":".codespellrc",
+            "remote_config":"/sast/config/data/setup.cfg",
+            "check_files_suffix":[".c", ".cc", ".h", ".hpp", ".cpp",".py","CMakeLists.txt",".md",".markdown",".go",".rst",".sh"]
+        },
+        "mdlint check":{
+            "id":"SMD0001",
+            "guide_link":"",
+            "ignore_admin":[],
+            "config_path":"scripts/.markdownlint-cli2.jsonc"
+        },
+        "text file mod check":{
+            "id":"SX0025",
+            "guide_link":"",
+            "ignore_admin":[],
+            "check_dirs":[],
+            "check_files_regex":["^BUILD$",".*\\.asm$",".*\\.bin$",".*\\.cc$",".*\\.cl$",".*\\.cmake$",".*\\.cpp$",".*\\.cu$",".*\\.c$",".*\\.xml$",".*\\.gif$","\\.gitignore$",".*\\.hpp$",".*\\.h$",".*\\.iml$",".*\\.inc$",".*\\.jpg$",
+            ".*\\.json$","Makefile$",".*\\.md5$",".*\\.md$",".*\\.MD$",".*\\.mk$",".*\\.mlir$",".*\\.onnx$",".*\\.patch$",".*\\.pb$",".*\\.png$",".*\\.PNG$",".*\\.proto$",".*\\.s$",".\\*.S$",".\\*.ts$","^.*\\.txt$",".*\\.xml$",".*\\.yuv$"],
+            "message":"Please remove executable permissions on above text files:"
+        },
+        "pylint check":{
+            "id":"SP0027",
+            "guide_link":"",
+            "ignore_admin":[],
+            "check_files":".*\\.py"
+        },
+        "lizard check":{
+            "id":"SX0029",
+            "guide_link":"",
+            "ignore_admin":[],
+            "suffix":[".sh", ".py", ".hpp", ".h", ".cc", ".cpp", ".c",".go",".java"],
+            "skip_files":[],
+            "repo_config_file":""
+        },
+        "hardcode check":{
+            "id":"SX0030",
+            "guide_link":"",
+            "ignore_admin":[],
+            "suffix":[".sh", ".py", ".hpp", ".h", ".cc", ".cpp", ".c",".go",".java"],
+            "skip_files":[],
+            "repo_config_file":"",
+            "hardcode_list":["^/usr/local/","^/home/","^/usr/include/","^/mnt/","^/root/"]
+        },
+        "ruff check":{
+            "id":"SP0033",
+            "guide_link":"",
+            "ignore_admin":[],
+            "check_files":".*\\.py",
+            "default_config":"",
+            "exclude_files":[]
+        },
+        "gitleaks check":{
+            "id":"SX0051",
+            "guide_link":"",
+            "ignore_admin":[]
+        },
+        "cpp17 feature check":{
+            "id":"SC0007",
+            "guide_link":"",
+            "ignore_admin":[]
+        },
+        "commit message check":{
+            "id":"SX0026",
+            "guide_link":"",
+            "ignore_admin":[],
+            "forbidden_single_string":["na","n/a","N/A","test"],
+            "template_fields":["Root Cause","Solution","Test","Impact area","Fix status"],
+            "bypass_commit_author":[]
+        }
+    },
+    "skip_check" : {
+        "ignore_change_keyword":"skip static analysis",
+        "ignore_admin":[]
+    },
+    "checks_group":{
+        "external_checks":[
+                "codespell_check","cpplint_check","gitleaks_check","hardcode_check","jsonlint_check","line_terminators_check"
+            ]
+        }
+}
