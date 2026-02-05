@@ -1,0 +1,29 @@
+name: Static Code Analysis
+
+on:
+  pull_request:
+    branches:
+      - master
+      - develop
+  push:
+    branches:
+      - master
+      - develop
+
+jobs:
+  static-check:
+    runs-on: self-hosted
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # 需要完整的git历史来比较变更
+
+    - name: Build Docker image
+      run: |
+        docker build -t sast:latest -f Dockerfile .
+
+    - name: Run static code analysis
+      run: |
+        docker run --rm -v $(pwd):/app -u $(id -u):$(id -g) -w /app sast:latest bash -c 'cd /app && python3 /sast/run.py --all_ci_check'
