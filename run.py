@@ -60,6 +60,7 @@ class AllCICheck():
                         try:
                             checker.check()
                         except Exception as e:
+                            print(sast_checker,e)
                             exit_flag = 1
         sys.exit(exit_flag)
 
