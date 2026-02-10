@@ -34,6 +34,7 @@ class CIChecker(CICheckerCommon):
 
     def __init__(self, api_init =None, args = None , check_api_type = None , static_check = StaticCheck):
         self.check_name = "requirements check"
+        self.local_ci_check = True
         super().__init__(api_init, args, check_api_type, self.check_name,static_check)
 
     def get_check_files(self):
