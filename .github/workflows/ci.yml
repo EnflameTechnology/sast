@@ -15,10 +15,12 @@ jobs:
     runs-on: self-hosted
     
     steps:
+
     - name: Checkout code
       uses: actions/checkout@v4
       with:
         fetch-depth: 0  # 需要完整的git历史来比较变更
+        ssh-key: ${{ secrets.SSH_PUB_KEY }}
 
     - name: Run static code analysis
       run: |
