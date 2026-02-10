@@ -35,7 +35,7 @@ class CIChecker(CICheckerCommon):
     def __init__(self, api_init =None , args =None, check_api_type =None ,static_check = StaticCheck):
         self.check_name = "jsonlint check"
         super().__init__(api_init, args, check_api_type, self.check_name,static_check)
-        self.local_ci_check = False
+        self.local_ci_check = True
         self.command_output = dict()
         self._jsonlint_file_filter()
 
