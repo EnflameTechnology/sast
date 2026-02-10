@@ -36,6 +36,7 @@ class CIChecker(CICheckerCommon):
         self.check_name = "commit message check"
         super().__init__(api_init, args, check_api_type, self.check_name,static_check)
         self.pass_flag = True
+        self.local_ci_check = False
         self.fail_message = []
 
     def check_func(self):
