@@ -221,7 +221,54 @@
     },
     "checks_group":{
         "external_checks":[
-                "codespell_check","cpplint_check","gitleaks_check","hardcode_check","jsonlint_check","line_terminators_check"
+                "codespell_check","cpplint_check","gitleaks_check","hardcode_check","jsonlint_check","line_terminators_check","external_tools_check"
             ]
+        },
+    "external_tools":[
+        {
+            "name":"bandit",
+            "command":"bandit -r . -f json -o bandit_report.json",
+            "guide_link":"https://bandit.readthedocs.io/"
+        },
+        {
+            "name":"mypy",
+            "command":"mypy . --ignore-missing-imports --show-error-codes",
+            "guide_link":"https://mypy-lang.org/"
+        },
+        {
+            "name":"pylint",
+            "command":"pylint $(git ls-files '*.py') || true",
+            "guide_link":"https://pylint.pycqa.org/"
+        },
+        {
+            "name":"safety",
+            "command":"safety check -r requirements.txt --full-report || true",
+            "guide_link":"https://pyup.io/safety/"
+        },
+        {
+            "name":"detect-secrets",
+            "command":"detect-secrets scan --all-files --json > .secrets.json || true",
+            "guide_link":"https://github.com/Yelp/detect-secrets"
+        },
+        {
+            "name":"checkov",
+            "command":"checkov -d . -o json || true",
+            "guide_link":"https://www.checkov.io/"
+        },
+        {
+            "name":"hadolint",
+            "command":"hadolint Dockerfile -f json || true",
+            "guide_link":"https://github.com/hadolint/hadolint"
+        },
+        {
+            "name":"tfsec",
+            "command":"tfsec . --format json --out tfsec_report.json || true",
+            "guide_link":"https://tfsec.dev/"
+        },
+        {
+            "name":"yamllint",
+            "command":"yamllint -f parsable . || true",
+            "guide_link":"https://yamllint.readthedocs.io/"
         }
+    ]
 }
