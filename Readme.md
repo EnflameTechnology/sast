@@ -48,11 +48,11 @@ python3 ${REPO_APTH}/sast/run.py --all_ci_check # 执行全部的检查项
 # 进入git仓库的根目录
 cd git_repo
 # 执行一项检查
-docker run --rm -it -v $(pwd):/app -u $(id -u):$(id -g) -w /app  sast:release bash -c 'python3 /sast/run.py --cpplint_check'
+docker run --rm -it -e HOME=/app -v $(pwd):/app -u $(id -u):$(id -g) -w /app  sast:release bash -c 'python3 /sast/run.py --cpplint_check'
 # 执行多个检查项
-docker run --rm -it -v $(pwd):/app -u $(id -u):$(id -g) -w /app  sast:release bash -c 'python3 /sast/run.py --cpplint_check --shell_check'
+docker run --rm -it -e HOME=/app -v $(pwd):/app -u $(id -u):$(id -g) -w /app  sast:release bash -c 'python3 /sast/run.py --cpplint_check --shell_check'
 # 执行检查组，需要预先在配置文件中定义检查组名称和组内的检查项名
-docker run --rm -it -v $(pwd):/app -u $(id -u):$(id -g) -w /app  sast:release bash -c 'python3 /sast/run.py --checks_group external_checks'
+docker run --rm -it -e HOME=/app -v $(pwd):/app -u $(id -u):$(id -g) -w /app  sast:release bash -c 'python3 /sast/run.py --checks_group external_checks'
 ```
 
 ### 使用指定配置文件

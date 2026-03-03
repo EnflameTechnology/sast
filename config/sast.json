@@ -167,9 +167,10 @@
         },
         "pylint check":{
             "id":"SP0027",
-            "guide_link":"",
+            "guide_link":"https://pylint.pycqa.org/",
             "ignore_admin":[],
-            "check_files":".*\\.py"
+            "check_files":".*\\.py$",
+            "exclude_files":[]
         },
         "lizard check":{
             "id":"SX0029",
@@ -200,6 +201,45 @@
             "id":"SX0051",
             "guide_link":"",
             "ignore_admin":[]
+        },
+        "bandit check":{
+            "id":"SX0061",
+            "guide_link":"https://bandit.readthedocs.io/",
+            "ignore_admin":[],
+            "check_files":".*\\.py$",
+            "exclude_files":[]
+        },
+        "mypy check":{
+            "id":"SX0062",
+            "guide_link":"https://mypy-lang.org/",
+            "ignore_admin":[],
+            "check_files":".*\\.py$",
+            "exclude_files":[]
+        },
+        "safety check":{
+            "id":"SX0063",
+            "guide_link":"https://pyup.io/safety/",
+            "ignore_admin":[],
+            "check_files_regex":[".*requirements.*\\.txt$"]
+        },
+        "detect-secrets check":{
+            "id":"SX0064",
+            "guide_link":"https://github.com/Yelp/detect-secrets",
+            "ignore_admin":[]
+        },
+        "hadolint check":{
+            "id":"SX0065",
+            "guide_link":"https://github.com/hadolint/hadolint",
+            "ignore_admin":[],
+            "check_files":".*Dockerfile.*",
+            "exclude_files":[]
+        },
+        "yamllint check":{
+            "id":"SX0066",
+            "guide_link":"https://yamllint.readthedocs.io/",
+            "ignore_admin":[],
+            "check_files":".*\\.(yml|yaml)$",
+            "exclude_files":[]
         },
         "cpp17 feature check":{
             "id":"SC0007",

@@ -36,6 +36,7 @@ class CIChecker(CICheckerCommon):
         self.check_name = "commit message check"
         super().__init__(api_init, args, check_api_type, self.check_name,static_check)
         self.pass_flag = True
+        self.local_ci_check = False
         self.fail_message = []
 
     def check_func(self):
@@ -51,7 +52,7 @@ class CIChecker(CICheckerCommon):
         #         self.pass_flag = False
         #         self.fail_message.append("After removing '[type](jira id)' in the title, the remaining content must have at least 10 valid characters.")
         for template_field in self.template_fields:
-            template_field_reg_find = re.findall(template_field + ":\s*\n(.*?)\n",self.commit_message)
+            template_field_reg_find = re.findall(template_field + ":\s*\n(.*?)",self.commit_message)
             if not template_field_reg_find:
                 self.pass_flag = False
                 self.fail_message.append("There must be {},please fill in it".format(template_field))

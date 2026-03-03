@@ -41,7 +41,7 @@ class StaticCheck():
         self.timestamp = datetime.now()
         if os.path.exists(cache_file):
             with open(cache_file, 'rb') as load_file:
-                self.cache = pickle.load(load_file, encoding='utf-8')
+                self.cache = pickle.load(load_file, encoding='utf-8')  # nosec B301 - local cache only
                 self.cache.timestamp = datetime.now()
         else:
             if not api_init or not args or not check_api_type:
@@ -82,7 +82,7 @@ class StaticCheck():
 
             if self.check_api_type != API_TYPE_LOCALGIT:
                 with open(SERIALIZED_FILE_NAME, 'wb') as dump_file:
-                    pickle.dump(self, dump_file, protocol=pickle.DEFAULT_PROTOCOL)
+                    pickle.dump(self, dump_file, protocol=pickle.DEFAULT_PROTOCOL)  # nosec B301 - local cache only
 
 
     def _patchset_files(self):

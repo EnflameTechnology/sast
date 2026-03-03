@@ -112,7 +112,10 @@ class Local(object):
                 command_output = pipe.communicate()[0]
                 return command_output.decode("utf-8",errors="ignore").strip()
             else:
-                return ""
+                pipe = subprocess.Popen("git log -1 --pretty=format:%B",
+                                        stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True, executable="/bin/bash")
+                command_output = pipe.communicate()[0]
+                return command_output.decode("utf-8",errors="ignore").strip()
 
     def get_local_path(self):
         '''
