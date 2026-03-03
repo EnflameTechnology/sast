@@ -45,10 +45,10 @@ class CIChecker(CICheckerCommon):
                 self.files_static_check_status[file_need_check]['name_or_email_msg'] = set()
                 self.files_static_check_status[file_need_check]['key_word'] = set()
                 self.files_static_check_status[file_need_check]['add_string'] = set()
-                change_line_list = [x for x in self.diff_info.get(file_need_check, {}).get("add", [])]
+                change_line_list = [x for x in self.diff_info.get(file_need_check, {}).get("add", []) if isinstance(x, (tuple, list)) and len(x) > 1 and isinstance(x[1], str)]
                 for index,line in change_line_list:
                     for key_word in self.forbidden_string_dict.keys():
-                        if key_word in line:
+                        if isinstance(line, str) and key_word in line:
                             check_dirs = self.forbidden_string_dict[key_word].get("check_dirs",[])
                             if not check_dirs:
                                 check_flag = True
@@ -61,15 +61,20 @@ class CIChecker(CICheckerCommon):
                                 self.pass_flag = False
                                 self.files_static_check_status[file_need_check]['check_status'] = False
                                 self.files_static_check_status[file_need_check]['key_word'].add((index,key_word))
-                    check_name_msg = re.findall(self.judge_str,line)
-                    if check_name_msg:
-                        self.pass_flag = False
-                        self.files_static_check_status[file_need_check]['check_status'] = False
-                        for i in range(len(check_name_msg)):
-                            name_msg = check_name_msg[i][0]
-                            self.files_static_check_status[file_need_check]['name_or_email_msg'].add(name_msg)
-                add_lines = [x[1] for x in self.diff_info.get(file_need_check, {}).get("add",[]) if  not x[1].lstrip().startswith('#')]
-                delete_lines = [x[1] for x in self.diff_info.get(file_need_check, {}).get("del",[]) if  not x[1].lstrip().startswith('#')]
+                    if self.judge_str and isinstance(line, str):  # 只有当judge_str不为空且line是字符串时才检查
+                        check_name_msg = re.findall(self.judge_str,line)
+                        if check_name_msg:
+                            self.pass_flag = False
+                            self.files_static_check_status[file_need_check]['check_status'] = False
+                            for i in range(len(check_name_msg)):
+                                if isinstance(check_name_msg[i], (tuple, list)) and len(check_name_msg[i]) > 0:
+                                    name_msg = check_name_msg[i][0]
+                                    self.files_static_check_status[file_need_check]['name_or_email_msg'].add(name_msg)
+                                elif isinstance(check_name_msg[i], str):
+                                    # 如果返回的是字符串而不是元组/列表
+                                    self.files_static_check_status[file_need_check]['name_or_email_msg'].add(check_name_msg[i])
+                add_lines = [x[1] for x in self.diff_info.get(file_need_check, {}).get("add",[]) if isinstance(x, (tuple, list)) and len(x) > 1 and isinstance(x[1], str) and not x[1].lstrip().startswith('#')]
+                delete_lines = [x[1] for x in self.diff_info.get(file_need_check, {}).get("del",[]) if isinstance(x, (tuple, list)) and len(x) > 1 and isinstance(x[1], str) and not x[1].lstrip().startswith('#')]
                 for keyword in self.forbidden_add_string:
                     del_count = 0
                     add_count = 0
@@ -87,7 +92,7 @@ class CIChecker(CICheckerCommon):
                         self.files_static_check_status[file_need_check]["check_status"] = False
                         self.files_static_check_status[file_need_check]["msg"] = self.files_static_check_status[file_need_check].get("msg","") + "Add '{}' is not allowed!\n".format(keyword)
                         self.files_static_check_status[file_need_check]['add_string'].add(keyword)
-                add_line_info = [x for x in self.diff_info.get(file_need_check, {}).get("add",[]) ]
+                add_line_info = [x for x in self.diff_info.get(file_need_check, {}).get("add",[]) if isinstance(x, (tuple, list)) and len(x) > 1 and isinstance(x[1], str)]
                 for check_mode in self.forbidden_string_mode:
                     flag = False
                     for repo in self.forbidden_string_mode[check_mode].get("repo",[]):
@@ -95,7 +100,7 @@ class CIChecker(CICheckerCommon):
                             flag = True
                     if flag:
                         for add_line in add_line_info:
-                            if re.match(check_mode,add_line[1]):
+                            if len(add_line) > 1 and isinstance(add_line[1], str) and re.match(check_mode,add_line[1]):
                                 self.pass_flag = False
                                 if file_need_check not in self.files_static_check_status:
                                     self.files_static_check_status[file_need_check] = {"check_status":False}
