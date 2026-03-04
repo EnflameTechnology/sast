@@ -7,7 +7,7 @@ RUN sed -i s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g /etc/apk/repositories \
     && echo "http://mirrors.aliyun.com/alpine/latest-stable/community/" >> /etc/apk/repositories \
     && apk update \
     && apk add --no-cache git wget readline-dev bash cloc file curl openssl \
-    tzdata zlib zlib-dev git-lfs gojq sqlite-dev \
+    tzdata zlib zlib-dev git-lfs gojq sqlite-dev build-base libffi-dev \
     && apk cache clean \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
@@ -50,11 +50,14 @@ RUN wget -P /tmp https://github.com/astral-sh/ruff/releases/download/0.6.4/ruff-
     && cd ../ \
     && rm -rf ruff-x86_64-unknown-linux-gnu/ ruff-x86_64-unknown-linux-gnu.tar.gz
 
-#### add module package
-RUN python3.8 -m pip install --no-cache-dir -U setuptools==59.6.0 wheel==0.37.1 pip==21.3.1 requests==2.22.0 pylint==3.2.7 lizard==1.17.31
+RUN wget https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64 -O /usr/local/bin/hadolint \
+    && chmod +x /usr/local/bin/hadolint
 
 #### add project
 COPY . /sast/
+
+#### add module package
+RUN python3.8 -m pip install --no-cache-dir -U -r /sast/requirements.txt
 
 WORKDIR /app
 
